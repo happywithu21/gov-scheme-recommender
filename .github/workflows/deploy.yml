@@ -1,0 +1,57 @@
+name: Deploy Government Scheme Recommender
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest
+
+      - name: Run Backend Tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:$(pwd)/backend
+          # Uncomment below line to run actual tests once implemented
+          # pytest tests/backend/
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Build Backend Docker Image
+        run: |
+          cd backend
+          docker build -t gov-scheme-backend:latest -f Dockerfile .
+      
+      - name: Build Frontend Docker Image
+        run: |
+          cd frontend
+          npm install --package-lock-only
+          docker build -t gov-scheme-frontend:latest -f Dockerfile .
+
+      - name: Deploy Service Placeholder
+        run: |
+          echo "Simulating deployment to production server..."
+          # Insert script to SSH into server and run docker-compose pull && up
+          echo "Deployed backend and frontend successfully."

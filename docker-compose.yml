@@ -1,0 +1,51 @@
+# docker-compose.yml
+# ------------------
+# Multi-container orchestration for the Gov Scheme Recommender system
+
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: gov-scheme-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-gov_schemes}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Automatically initialize the database with our schema when created
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: gov-scheme-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DB_USER=${DB_USER:-postgres}
+      - DB_PASSWORD=${DB_PASSWORD:-postgres}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${DB_NAME:-gov_schemes}
+      - DATA_GOV_API_KEY=${DATA_GOV_API_KEY}
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gov-scheme-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+

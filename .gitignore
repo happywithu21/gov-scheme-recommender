@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.env
+
+# Data artifacts
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+.npm/
+
+# OS / Editor
+.DS_Store
+.vscode/
+.idea/
