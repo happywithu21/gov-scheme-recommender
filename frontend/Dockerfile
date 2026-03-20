@@ -4,8 +4,9 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 # Copy package info and install dependencies
-COPY package.json package-lock.json ./
+COPY package.json ./
 RUN npm install
+
 
 # Copy source code and build
 COPY . .
@@ -13,6 +14,9 @@ RUN npm run build
 
 # Use lightweight Nginx for serving statically generated files
 FROM nginx:alpine
+
+# Copy Nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy built assets to Nginx directory
 COPY --from=build /app/dist /usr/share/nginx/html

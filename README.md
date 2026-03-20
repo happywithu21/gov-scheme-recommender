@@ -1,79 +1,170 @@
-# Government Scheme Recommendation System
+# YojanaMitra 🏛️
 
-A web application designed to recommend Indian government schemes to citizens based on their demographic profile. Natively processes and consumes APIs from `data.gov.in`.
+> **Your companion for government schemes**
 
-## Project Overview
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![FastAPI](https://img.shields.io/badge/Backend-FastAPI-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/Frontend-React-61DAFB?logo=react)](https://reactjs.org/)
+[![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-336791?logo=postgresql)](https://www.postgresql.org/)
 
-- **Backend**: Python + FastAPI (High performance, async-ready capabilities)
-- **Frontend**: React.js + Vite (Fast compilation, modern SPA rendering)
-- **Database**: PostgreSQL (Structured relational queries and powerful indexing)
-- **Data ETL**: Custom Python scripting interacting iteratively with the Open Govt API.
-
-## Repository Structure
-
-- `backend/`: FastAPI application code (Controllers, Services, Models, Schema).
-- `frontend/`: React UI, including the dynamic `UserForm` and `SchemeCard` pipelines.
-- `data/`: Automated storage container holding JSON sets parsed from Data.gov.
-- `scripts/`: ETL jobs (`data_collection.py`, `load_schemes.py`).
-- `database/`: `.sql` scripts dynamically mounted via Docker to build the schema.
+YojanaMitra is a full-stack platform that helps Indian citizens **discover government schemes they are eligible for**, using official open data from [data.gov.in](https://data.gov.in/). Powered by a smart AI assistant (Mitra), users can find personalised welfare programs, subsidies, and benefits in seconds.
 
 ---
 
-## Setup Instructions
+## ✨ Features
 
-Ensure you have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed on your machine.
-Ensure you have an API Key generated from [data.gov.in](https://data.gov.in/).
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/your-username/gov-scheme-recommender.git
-   cd gov-scheme-recommender
-   ```
-
-2. **Configure Environment Variables:**
-   Copy the example config and inject your real secure values.
-   ```bash
-   cp .env.example .env
-   ```
-   Add your API Keys to `.env`.
+| Feature | Description |
+|---------|-------------|
+| 🤖 **Mitra AI Chatbot** | Context-aware assistant that extracts user profile from natural language and recommends schemes |
+| 🔍 **Eligibility Engine** | Smart backend filters schemes by age, income, state, gender, and social category |
+| 📊 **Insights Dashboard** | Interactive charts showing scheme distribution by state, category, and popularity |
+| 🗂️ **Advanced Filters** | Sidebar with keyword search, quick-action pills (Students, Farmers, Women), and income slider |
+| 📋 **Scheme Comparison** | Compare multiple schemes side-by-side |
+| 🎨 **Modern UI** | Glassmorphism design, smooth micro-animations, and a responsive mobile layout |
 
 ---
 
-## Run Locally (Docker)
+## 🛠️ Tech Stack
 
-To instantly spin up the Database, Backend APIs, and Frontend Webapp:
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | React 18, Vite, Recharts, Lucide Icons |
+| **Backend** | Python 3.11, FastAPI, SQLAlchemy, Uvicorn |
+| **Database** | PostgreSQL 15 |
+| **Data ETL** | Python scripts consuming the [data.gov.in](https://data.gov.in) API |
+| **Deployment** | Docker, Docker Compose, GitHub Actions CI/CD |
 
-```bash
-docker-compose up --build
+---
+
+## 📁 Project Structure
+
+```
+yojanamitra/
+│
+├── backend/                  # FastAPI application
+│   └── app/
+│       ├── api/routes.py     # REST API endpoints + smart chat engine
+│       ├── services/         # Eligibility matching engine
+│       ├── models/           # SQLAlchemy ORM + Pydantic schemas
+│       └── main.py           # App entry point + CORS config
+│
+├── frontend/                 # React + Vite SPA
+│   └── src/
+│       ├── components/       # Navbar, Footer, Chatbot, SchemeCard, etc.
+│       ├── pages/            # Home, AllSchemes, Insights, Compare, etc.
+│       └── services/api.js   # API service layer
+│
+├── database/
+│   └── schema.sql            # PostgreSQL schema
+│
+├── scripts/
+│   ├── data_collection.py    # ETL: fetch schemes from data.gov.in
+│   └── load_schemes.py       # ETL: populate the database
+│
+├── docs/                     # Project documentation
+├── tests/                    # Backend test suite
+│
+├── .github/workflows/        # GitHub Actions CI/CD pipeline
+├── docker-compose.yml        # Full-stack orchestration
+├── .env.example              # Environment variable template
+├── requirements.txt          # Python dependencies
+└── README.md
 ```
 
-- **Frontend Application:** Available at [http://localhost:3000](http://localhost:3000)
-- **FastAPI Backend (Swagger Docs):** Available at [http://localhost:8000/docs](http://localhost:8000/docs)
+---
 
-*Note: You must first run the ETL scripts to populate your database with scheme datasets to see recommendations in action.*
+## 🚀 Setup Instructions
 
-### Running ETL Scripts manually
+### Prerequisites
+- [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js 18+](https://nodejs.org/)
+- [Python 3.11+](https://www.python.org/)
+- API Key from [data.gov.in](https://data.gov.in/)
 
-Open a separate terminal and ensure your virtual environment is active:
+---
+
+### Option A — Docker (Recommended)
+
 ```bash
-pip install -r requirements.txt
+# 1. Clone the repository
+git clone https://github.com/your-username/yojanamitra.git
+cd yojanamitra
+
+# 2. Set up environment variables
+cp .env.example .env
+# Edit .env with your actual values
+
+# 3. Build and start all services
+docker-compose up --build
+
+# 4. Populate the database with scheme data
 python scripts/data_collection.py
 python scripts/load_schemes.py
 ```
 
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:8000 |
+| Swagger Docs | http://localhost:8000/docs |
+
 ---
 
-## Deployment Instructions
+### Option B — Local Development
 
-This repository is pre-configured with a **GitHub Actions CI/CD Pipeline**.
+```bash
+# Start just the database via Docker
+docker-compose up -d db
 
-To deploy to your own servers / cloud environment:
-1. Ensure your server environment accepts SSH connections via GitHub Secrets.
-2. Push your code to the `main` branch. 
-3. The pipeline in `.github/workflows/deploy.yml` will automatically:
-   - Lint and Test code with `pytest`.
-   - Build `gov-scheme-backend` Docker images.
-   - Build `gov-scheme-frontend` Docker images.
-   - Execute the deploy simulation command.
-   
-For production web hosting, it's recommended to deploy the Next.js/React App via Vercel or Netlify, while hosting the Dockerized FastAPI & PostgreSQL array on a VPS (e.g. AWS EC2, DigitalOcean) and configuring standard Nginx Reverse Proxies with SSL.
+# Backend
+python -m venv venv
+.\venv\Scripts\activate       # Windows
+pip install -r requirements.txt
+$env:PYTHONPATH="$PWD/backend"
+uvicorn app.main:app --reload --port 8000 --app-dir backend
+
+# Frontend (new terminal)
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+## 🤖 Using the Mitra AI Chatbot
+
+Simply describe yourself in natural language:
+
+> *"I am a 22-year-old student from Punjab with income 2 lakh"*
+
+Mitra will:
+1. Extract your profile (age, state, income, category)
+2. Run the eligibility engine
+3. Return matching schemes with explanations like:
+   - ✔ Age 22 falls in eligible range (18–35)
+   - ✔ Income ₹2,00,000 ≤ scheme limit ₹2,50,000
+   - ✔ Available in Punjab
+
+---
+
+## 🔮 Future Improvements
+
+- [ ] Multilingual support (Hindi, Tamil, Telugu, Bengali)
+- [ ] Voice input via Web Speech API
+- [ ] Push notifications for scheme deadlines
+- [ ] Integration with DigiLocker for auto-document verification
+- [ ] Mobile app (React Native)
+- [ ] Real LLM integration (Gemini / GPT-4) for richer conversations
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+---
+
+## 🙏 Acknowledgements
+
+- [Open Government Data Platform India](https://data.gov.in/) for the official scheme dataset
+- Built with ❤️ for Bharat

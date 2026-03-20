@@ -23,5 +23,6 @@ class Scheme(Base):
     benefits = Column(Text)
     documents_required = Column(Text)
     application_link = Column(String(500))
+    ministry = Column(String(255))
     created_at = Column(TIMESTAMP)
     updated_at = Column(TIMESTAMP)

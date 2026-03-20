@@ -51,6 +51,7 @@ class SchemeResponse(BaseModel):
     benefits: Optional[str] = None
     documents_required: Optional[str] = None
     application_link: Optional[str] = None
+    ministry: Optional[str] = None
     
     # Enable Pydantic's mapping from SQLAlchemy objects
     class Config:
@@ -63,3 +64,34 @@ class RecommendationResponse(BaseModel):
     status: str
     match_count: int
     recommendations: List[SchemeResponse]
+
+class ChatMessageRequest(BaseModel):
+    """
+    Schema for an incoming message to the AI Chatbot.
+    """
+    message: str = Field(..., description="The user's chat message")
+    context: Optional[dict] = Field(default={}, description="Accumulated user profile context from prior turns")
+
+class ChatSchemeResult(BaseModel):
+    """A lightweight scheme card returned by the chatbot."""
+    id: int
+    scheme_name: str
+    description: Optional[str] = None
+    benefits: Optional[str] = None
+    state: Optional[str] = None
+    category: Optional[str] = None
+    application_link: Optional[str] = None
+    why_eligible: List[str] = []
+
+    class Config:
+        from_attributes = True
+
+class ChatMessageResponse(BaseModel):
+    """
+    Schema for the AI Chatbot's response.
+    """
+    reply: str
+    updated_context: dict = {}
+    schemes: Optional[List[ChatSchemeResult]] = None
+    next_question: Optional[str] = None
+

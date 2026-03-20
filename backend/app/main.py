@@ -11,8 +11,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router as api_router
 
 app = FastAPI(
-    title="Government Scheme Recommendation API",
-    description="API for recommending government schemes based on citizen eligibility.",
+    title="YojanaMitra API",
+    description="YojanaMitra – Your companion for government schemes. API for discovering and recommending government schemes based on citizen eligibility.",
     version="1.0.0"
 )
 

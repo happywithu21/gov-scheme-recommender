@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS schemes (
     benefits TEXT, -- Descriptive text of what the scheme provides
     documents_required TEXT, -- CSV string or JSON of required proofs
     application_link VARCHAR(500), -- URL to apply
+    ministry VARCHAR(255), -- Name of the government ministry providing the scheme
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

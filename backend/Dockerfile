@@ -12,13 +12,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements from root directly into container
-COPY ../requirements.txt .
+COPY requirements.txt .
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend app contents
-COPY . .
+# Copy backend app contents and structure
+COPY backend/ ./
 
 # Expose FastAPI default port
 EXPOSE 8000
