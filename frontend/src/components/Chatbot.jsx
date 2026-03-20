@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, X, Bot, Zap, Sprout, GraduationCap, RefreshCw, ExternalLink, ChevronDown } from 'lucide-react';
 
-const API_URL = 'http://localhost:8000/api/v1';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 // ── Quick Action Chips ──────────────────────────────────────────
 const QUICK_ACTIONS = [
