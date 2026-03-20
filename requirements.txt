@@ -1,22 +1,18 @@
-# Backend App Dependencies
-# Provides the core API server capabilities
+# ─── Core API Framework ────────────────────────────────────────────────────────
 fastapi>=0.100.0
 uvicorn[standard]>=0.23.0
 pydantic>=2.0.0
 pydantic-settings>=2.0.0
 
-# Database Dependencies
-# Connects the API and processing scripts to PostgreSQL
-# sqlalchemy>=2.0.0
-# psycopg2-binary>=2.9.0
-
-# Data Processing & ETL Dependencies
-# Required to fetch, clean, and transform government dataset
-# pandas>=2.0.0
-# requests>=2.31.0
-
-requests>=2.31.0
-python-dotenv>=1.0.0
-
+# ─── Database ──────────────────────────────────────────────────────────────────
 sqlalchemy>=2.0.0
 psycopg2-binary>=2.9.0
+
+# ─── Data Collection & ETL ────────────────────────────────────────────────────
+requests>=2.31.0
+
+# ─── Configuration ────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0
+
+# ─── Production Extras ────────────────────────────────────────────────────────
+gunicorn>=21.0.0

@@ -1,4 +1,7 @@
-const API_URL = 'http://localhost:8000/api/v1';
+// API base URL — set VITE_API_URL in Vercel (or .env.local) to point at the Render backend.
+// Falls back to localhost:8000 for local development.
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+
 
 export const recommendSchemes = async (userProfile) => {
   try {
