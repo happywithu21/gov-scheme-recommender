@@ -1,7 +1,6 @@
-// API base URL — set VITE_API_URL in Vercel (or .env.local) to point at the Render backend.
+// API base URL — set VITE_API_URL in Vercel to point at the Render backend.
 // Falls back to localhost:8000 for local development.
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
-
 
 export const recommendSchemes = async (userProfile) => {
   try {
@@ -10,10 +9,13 @@ export const recommendSchemes = async (userProfile) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userProfile)
     });
-    if (!response.ok) throw new Error('Failed to fetch recommendations');
+    
+    if (!response.ok) {
+      throw new Error(`[Recommend API] HTTP Error: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
-    console.error("API Error:", error);
+    console.error("❌ Recommend API failed.", error.message);
     throw error;
   }
 };
@@ -31,22 +33,30 @@ export const fetchAllSchemes = async (filters = {}, skip = 0, limit = 20) => {
       params.append('income_max', filters.income_max);
     }
 
-    const response = await fetch(`${API_URL}/schemes?${params.toString()}`);
-    if (!response.ok) throw new Error('Failed to fetch schemes');
+    const endpoint = `${API_URL}/schemes?${params.toString()}`;
+    const response = await fetch(endpoint);
+    
+    if (!response.ok) {
+      throw new Error(`[Schemes API] HTTP Error: ${response.status} at ${endpoint}`);
+    }
+    
     return await response.json();
   } catch (error) {
-    console.error("API Error:", error);
-    throw error;
+    console.error("❌ Fetch All Schemes API failed.", error.message);
+    // Return empty fallback structure so UI doesn't crash completely
+    return { status: "error", total: 0, data: [] };
   }
 };
 
 export const fetchSchemeById = async (id) => {
   try {
     const response = await fetch(`${API_URL}/scheme/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch scheme details');
+    if (!response.ok) {
+      throw new Error(`[Scheme Detail API] HTTP Error: ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
-    console.error("API Error:", error);
-    throw error;
+    console.error(`❌ Fetch Scheme ID ${id} failed.`, error.message);
+    return null;
   }
 };
